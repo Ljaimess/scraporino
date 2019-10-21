@@ -22,7 +22,9 @@ app.use(express.static("public"));
 
 // const mongod_uri = process.envMONGOD_URI || process.env.MONGOD_URL || "mongod://localhost/scrappynews";
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://Ljaimes:calcihera25@ds137488.mlab.com:37488/heroku_9f1pvn3m";
+// const MONGODB_URI = process.env.MONGODB_URI || "mongodb://Ljaimes:calcihera25@ds137488.mlab.com:37488/heroku_9f1pvn3m";
+const MONGODB_URI = process.env.MONGODB_URI;
+
 
 mongoose.connect(MONGODB_URI);
 
