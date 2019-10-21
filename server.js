@@ -7,7 +7,7 @@ const cheerio = require("cheerio");
 
 const db = require("./models");
 //the express things
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
@@ -24,17 +24,23 @@ app.use(express.static("public"));
 
 mongoose.connect("mongodb://localhost/scrappynews", { useNewUrlParser: true }), { useUnifiedTopology: true };
 
+app.get("/", function(req, res) {
+    res.json(path.join(__dirname, "public/index.html"));
+  });
+
 app.get("/scrape", function (req, res) {
     
     axios.get("http://www.theonion.com/").then(function (response) {
 
-        var $ = cheerio.load(response.data);
+        let $ = cheerio.load(response.data);
         $("section").each(function (i, element) {
             let result = {};
 
             result.title = $(this).children("a").text();
             result.link = $(this).children("a").attr("href");
-            db.Article.create(result).then(dbArticle => {
+
+            db.Article.create(result)
+                .then(dbArticle => {
                 console.log(dbArticle);
             })
                 .catch(err => {
@@ -53,8 +59,34 @@ app.get("/articles", (req, res) => {
         })
         .catch(err => {
             res.json(err);
+        });
+});
+
+app.get("/articles/:id", (req, res) => {
+    db.Article.findOne({ _id: req.params.id })
+        .populate("comment")
+        .then(function (dbArticle) {
+    
+            res.json(dbArticle);
         })
-})
+        .catch(function (err) {
+  
+            res.json(err);
+        });
+});
+
+app.post("/articles/:id", (req, res) => {
+    db.Comment.create(req.body)
+        .then(function (dbComment) {
+            return db.Article.findOneAndUpdate({ _id: req.parama.id }, { comment: dbComment._id }, { new: true });
+        })
+        .then(dbArticle => {
+            res.json(dbArticle);
+        })
+        .catch(err => {
+            res.json(err);
+        });
+});
 
 
 app.listen(PORT, function() {
