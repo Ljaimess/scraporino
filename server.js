@@ -24,8 +24,6 @@ app.use(express.static("public"));
 
 // const MONGODB_URI = process.env.MONGODB_URI || "mongodb://Ljaimes:calcihera25@ds137488.mlab.com:37488/heroku_9f1pvn3m";
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scrappynews"
-
-
 mongoose.connect(MONGODB_URI);
 
 app.get("/", function(req, res) {
