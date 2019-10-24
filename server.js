@@ -52,7 +52,7 @@ app.get("/scrape", function (req, res) {
                     
                 });
         });
-        res.send("Check that scraping");
+        res.redirect("/");
     });
 });
 

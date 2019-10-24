@@ -15,9 +15,6 @@ const ArticleSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Comment",
     },
-    image: {
-        type: String,
-    }
 });
 
 const Article = mongoose.model("Article", ArticleSchema);

@@ -18,7 +18,7 @@ $.getJSON("/articles", function (data) {
 $(document).on("click", "h2", function () {
     $("#comments").empty();
 
-    var theId = $(this).attr("data-id");
+    const theId = $(this).attr("data-id");
 
     $.ajax({
         method: "GET",
@@ -29,17 +29,19 @@ $(document).on("click", "h2", function () {
             $("#comments").append("<h3>" + data.title + "</h3>");
             $("#comments").append("<textarea id='bodyinput' name='body'></textarea>");
             $("#comments").append("<button data-id='" + data._id + "' id='savecomment'>Save Comment</button>");
-            $("#comments").append("<p>" + data.comment + "</p>");
+
+            if (data.comment){
+            $("#comments").append("<p>" + data.comment.body + "</p>");
             // if (data.comment) {
             //     $("#bodyinput").val(data.comment);
                 
-            // }
+            }
             console.log(data.comment + "the comment");
         });
 });
 
 $(document).on("click", "#savecomment", function () {
-    var theId = $(this).attr("data-id");
+    const theId = $(this).attr("data-id");
 
     $.ajax({
         method: "POST",
